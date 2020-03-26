@@ -8,6 +8,10 @@
 #ifndef SRC_DRIVERS_INTERRUPT_MIPS_GIC_MIPS_GIC_H_
 #define SRC_DRIVERS_INTERRUPT_MIPS_GIC_MIPS_GIC_H_
 
+#include <framework/mod/options.h>
+#include <config/embox/driver/interrupt/mips_gic.h>
+#define MIPS_GIC_BASE  OPTION_MODULE_GET(embox__driver__interrupt__mips_gic,NUMBER,base_addr)
+
 #define __IRQCTRL_IRQS_TOTAL      192
 
 #define MIPS_GIC_INTERRUPT_PIN    3
@@ -17,7 +21,7 @@
 #define GIC_SH_COUNTER_HI       0x0014
 #define GIC_SH_REVID            0x0020
 
-#define GIC_SH_INT_AVAIL(N)    (0x0024 + ((N >> 5) << 2))
+#define GIC_SH_INT_AVAIL(N)    (0x0024 + (((N) >> 5) << 2))
 #define GIC_SH_INT_AVAIL31_0    0x0024
 #define GIC_SH_INT_AVAIL63_32   0x0028
 #define GIC_SH_INT_AVAIL95_64   0x002C
@@ -27,7 +31,7 @@
 #define GIC_SH_INT_AVAIL223_192 0x003C
 #define GIC_SH_INT_AVAIL255_224 0x0040
 
-#define GIC_SH_GID_CONFIG(N)    (0x0080 + ((N >> 5) << 2))
+#define GIC_SH_GID_CONFIG(N)    (0x0080 + (((N) >> 5) << 2))
 #define GIC_SH_GID_CONFIG31_0    0x0080
 #define GIC_SH_GID_CONFIG63_32   0x0084
 #define GIC_SH_GID_CONFIG95_64   0x0088
@@ -37,7 +41,7 @@
 #define GIC_SH_GID_CONFIG223_192 0x0098
 #define GIC_SH_GID_CONFIG255_224 0x009C
 
-#define GIC_SH_POL(N)           (0x0100 + ((N >> 5) << 2))
+#define GIC_SH_POL(N)           (0x0100 + (((N) >> 5) << 2))
 #define GIC_SH_POL31_0           0x0100
 #define GIC_SH_POL63_32          0x0104
 #define GIC_SH_POL95_64          0x0108
@@ -47,7 +51,7 @@
 #define GIC_SH_POL223_192        0x0118
 #define GIC_SH_POL255_224        0x011C
 
-#define GIC_SH_TRIG(N)          (0x0180 + ((N >> 5) << 2))
+#define GIC_SH_TRIG(N)          (0x0180 + (((N) >> 5) << 2))
 #define GIC_SH_TRIG31_0          0x0180
 #define GIC_SH_TRIG63_32         0x0184
 #define GIC_SH_TRIG95_64         0x0188
@@ -57,21 +61,21 @@
 #define GIC_SH_TRIG223_192       0x0198
 #define GIC_SH_TRIG255_224       0x019C
 
-#define GIC_SH_DUAL(N)          (0x0200 + ((N >> 5) << 2))
+#define GIC_SH_DUAL(N)          (0x0200 + (((N) >> 5) << 2))
 #define GIC_SH_DUAL31_0          0x0200
 
-#define GIC_SH_WEDGE(N)         (0x0280 + ((N >> 5) << 2))
+#define GIC_SH_WEDGE(N)         (0x0280 + (((N) >> 5) << 2))
 
-#define GIC_SH_RMASK(N)         (0x0300 + ((N >> 5) << 2))
+#define GIC_SH_RMASK(N)         (0x0300 + (((N) >> 5) << 2))
 #define GIC_SH_RMASK31_0         0x0300
 
-#define GIC_SH_SMASK(N)         (0x0380 + ((N >> 5) << 2))
+#define GIC_SH_SMASK(N)         (0x0380 + (((N) >> 5) << 2))
 #define GIC_SH_SMASK31_0         0x0380
 
-#define GIC_SH_MASK(N)          (0x0400 + ((N >> 5) << 2))
+#define GIC_SH_MASK(N)          (0x0400 + (((N) >> 5) << 2))
 #define GIC_SH_MASK31_0          0x0400
 
-#define GIC_SH_PEND(N)          (0x0480 + ((N >> 5) << 2))
+#define GIC_SH_PEND(N)          (0x0480 + (((N) >> 5) << 2))
 #define GIC_SH_PEND31_0          0x0480
 #define GIC_SH_PEND63_32         0x0484
 #define GIC_SH_PEND95_64         0x0488
@@ -81,10 +85,10 @@
 #define GIC_SH_PEND223_192       0x0498
 #define GIC_SH_PEND255_224       0x049C
 
-#define GIC_SH_MAP_PIN(N)        (0x0500 + (N << 2))
+#define GIC_SH_MAP_PIN(N)        (0x0500 + ((N) << 2))
 #define GIC_SH_MAP0_PIN          0x0500
 
-#define GIC_SH_MAP_CORE31_0(N)   (0x2000 + (N << 5))
+#define GIC_SH_MAP_CORE31_0(N)   (0x2000 + (((N) << 5)))
 #define GIC_SH_MAP0_CORE31_0      0x2000
 
 

@@ -14,11 +14,12 @@
 #include <asm/mipsregs.h>
 #include <kernel/irq.h>
 
+
+//#define MIPS_GIC_BASE OPTION_GET(NUMBER,base_addr)
 #include <embox/unit.h>
 
 EMBOX_UNIT_INIT(mips_gic_init);
 
-#define MIPS_GIC_BASE OPTION_GET(NUMBER, base_addr)
 
 static int mips_gic_init(void) {
 	uint32_t c0;
@@ -31,8 +32,8 @@ static int mips_gic_init(void) {
 	mips32_gcb_set_register(GCR_GIC_BASE, MIPS_GIC_BASE | GIC_EN);
 	log_info("mips_gic revision %x", REG_LOAD(MIPS_GIC_BASE + GIC_SH_REVID));
 
-	for (i = 0; i < 256; i++) {
-		if (0 == (i % 32)) {
+	for (i = 0; i < __IRQCTRL_IRQS_TOTAL; i++) {
+		if (0 == (i & 0x1F)) {
 			REG32_STORE((MIPS_GIC_BASE + GIC_SH_RMASK(i)), 0xFFFFFFFF);
 			REG32_STORE(MIPS_GIC_BASE + GIC_SH_POL(i), 0xFFFFFFFF);
 		}
@@ -47,7 +48,7 @@ void irqctrl_enable(unsigned int interrupt_nr) {
 	int reg;
 	uint32_t mask;
 
-	if (interrupt_nr > __IRQCTRL_IRQS_TOTAL) {
+	if (interrupt_nr >= __IRQCTRL_IRQS_TOTAL) {
 		return;
 	}
 	if (interrupt_nr < 16) {
@@ -60,7 +61,7 @@ void irqctrl_enable(unsigned int interrupt_nr) {
 	}
 
 	reg = interrupt_nr >> 5;
-	mask = (1 << (interrupt_nr - (reg << 5)));
+	mask = (1 << (interrupt_nr & 0x1F));
 
 	REG32_STORE(MIPS_GIC_BASE + GIC_SH_SMASK(reg << 5), mask);
 }
@@ -69,7 +70,7 @@ void irqctrl_disable(unsigned int interrupt_nr) {
 	int reg;
 	uint32_t mask;
 
-	if (interrupt_nr > __IRQCTRL_IRQS_TOTAL) {
+	if (interrupt_nr >= __IRQCTRL_IRQS_TOTAL) {
 		return;
 	}
 	if (interrupt_nr < 16) {
@@ -82,7 +83,7 @@ void irqctrl_disable(unsigned int interrupt_nr) {
 	}
 
 	reg = interrupt_nr >> 5;
-	mask = (1 << (interrupt_nr - (reg << 5)));
+	mask = (1 << (interrupt_nr & 0x1F));
 
 	REG32_STORE(MIPS_GIC_BASE + GIC_SH_RMASK(reg << 5), mask);
 }
