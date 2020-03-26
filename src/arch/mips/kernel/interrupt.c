@@ -27,8 +27,8 @@ void mips_gic_interrupt(void) {
 	int i;
 
 	for (i = 0; i < __IRQCTRL_IRQS_TOTAL; i += 32) {
-		pend = REG32_LOAD(0x1BDC0000 + GIC_SH_PEND(i)) &
-				REG32_LOAD(0x1BDC0000 + GIC_SH_MASK(i));
+		pend = REG32_LOAD(MIPS_GIC_BASE + GIC_SH_PEND(i)) &
+				REG32_LOAD(MIPS_GIC_BASE + GIC_SH_MASK(i));
 
 		if (pend) {
 			int j;
